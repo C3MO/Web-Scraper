@@ -15,7 +15,7 @@ public class WebScraper {
 	public static void main(String[] args) {
 
 	    // A variable that is used to store the search query.
-	    String searchQuery = " " ;
+	    String searchQuery = "" ;
 		// The base URL of the website.
 		String baseUrl = " " ;
 		// Creating a new instance of the WebClient class.
@@ -30,7 +30,7 @@ public class WebScraper {
 			// Getting the HTML page from the URL.
 			HtmlPage page = client.getPage(searchUrl);
 			
-			List<HtmlElement> items = (List<HtmlElement>) page.getByXPath("//li[@class='result-row']") ;
+			List<HtmlElement> items = page.getByXPath("//li[@class='result-row']");
 			if(items.isEmpty()){
 				System.out.println("No items found !");
 			}else{
@@ -41,11 +41,12 @@ public class WebScraper {
 					HtmlElement spanPrice = htmlItem.getFirstByXPath(".//a/span[@class='result-price']");
 
 					// This is a ternary operator. It is a shorthand way of writing an if-else statement.
-					String itemPrice = spanPrice == null ? "0.0" : spanPrice.asText() ;
+					String itemPrice = spanPrice == null ? "0.0" : spanPrice.asNormalizedText() ;
+
 					
 					// Creating a new Item object and setting the title and url.
 					Item item = new Item();
-					item.setTitle(itemAnchor.asText());
+					item.setTitle(itemAnchor.asNormalizedText());
 					item.setUrl( baseUrl + itemAnchor.getHrefAttribute());
 					
 					// Removing the dollar sign from the price.
